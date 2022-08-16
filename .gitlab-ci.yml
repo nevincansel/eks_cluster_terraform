@@ -1,0 +1,54 @@
+image: ${CI_REGISTRY}/industrial-edge/tools/build-images/hub/istanbul-base-image:v0.9.13
+
+stages:
+  - plan
+  - apply
+  - destroy
+
+.terraform_plan: &terraform_plan
+  when: manual
+  script:
+    - chmod +x ./run.sh
+    - ./run.sh plan
+  tags:
+    - docker
+    - privileges
+    - docker-exposed
+    - aws
+
+
+.terraform_apply: &terraform_apply
+  when: manual
+  script:
+    - chmod +x ./run.sh
+    - ./run.sh apply
+  tags:
+    - docker
+    - privileges
+    - docker-exposed
+    - aws
+
+
+.terraform_destroy: &terraform_destroy
+  when: manual
+  script:
+    - chmod +x ./run.sh
+    - ./run.sh destroy
+  tags:
+    - docker
+    - privileges
+    - docker-exposed
+    - aws
+
+
+1-terraform-plan:
+  stage: plan
+  <<: *terraform_plan
+
+2-terraform-apply:
+  stage: apply
+  <<: *terraform_apply
+
+3-terraform-destroy:
+  stage: destroy
+  <<: *terraform_destroy
