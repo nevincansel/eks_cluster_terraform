@@ -1,0 +1,39 @@
+image: <runner_image>
+
+stages:
+  - plan
+  - apply
+  - destroy
+
+.terraform_plan: &terraform_plan
+  when: manual
+  script:
+    - chmod +x ./run.sh
+    - ./run.sh plan
+
+
+.terraform_apply: &terraform_apply
+  when: manual
+  script:
+    - chmod +x ./run.sh
+    - ./run.sh apply
+
+
+.terraform_destroy: &terraform_destroy
+  when: manual
+  script:
+    - chmod +x ./run.sh
+    - ./run.sh destroy
+
+
+1-terraform-plan:
+  stage: plan
+  <<: *terraform_plan
+
+2-terraform-apply:
+  stage: apply
+  <<: *terraform_apply
+
+3-terraform-destroy:
+  stage: destroy
+  <<: *terraform_destroy
